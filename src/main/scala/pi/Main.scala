@@ -7,7 +7,8 @@ object Main {
   case class Line(start: Point, end:Point)
 
   def main(args: Array[String]): Unit ={
-    println("Hallo")
+    val d = Drawing()
+    d.run()
   }
 
 }
