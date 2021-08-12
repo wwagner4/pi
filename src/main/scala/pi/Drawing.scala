@@ -16,7 +16,7 @@ object Drawing {
 
   def run(): Unit = {
     val canvas = Canvas(5000, 5000)
-    val poligone = RandomWalk.draw(canvas)
+    val poligone = Hilbert.draw(1, canvas)
     drawImage(canvas, poligone)
   }
 

@@ -4,7 +4,11 @@ import java.awt.Color
 
 object Main {
 
-  case class Point(x: Double, y:Double)
+  case class Point(x: Double, y:Double) {
+
+    def add(dx: Double, dy: Double): Point = Point(x + dx, y + dy)
+
+  }
 
   case class Line(color: Color, start: Point, end:Point)
 
