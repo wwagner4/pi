@@ -40,9 +40,9 @@ object Hilbert {
             val c = Seq(Line(co3, origin.add(s3, s3), origin.add(s3, s1)))
             (a, b, c)
           case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
-            val a = Seq(Line(co1, origin.add(s1, -s1), origin.add(s1, -s3)))
-            val b = Seq(Line(co2, origin.add(s1, -s3), origin.add(s3, -s3)))
-            val c = Seq(Line(co3, origin.add(s3, -s3), origin.add(s3, -s1)))
+            val a = Seq(Line(co1, origin.add(-s1, -s1), origin.add(-s1, -s3)))
+            val b = Seq(Line(co2, origin.add(-s1, -s3), origin.add(-s3, -s3)))
+            val c = Seq(Line(co3, origin.add(-s3, -s3), origin.add(-s3, -s1)))
             (a, b, c)
           case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
             ???
@@ -51,7 +51,10 @@ object Hilbert {
           case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
             ???
           case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
-            ???
+            val a = Seq(Line(co1, origin.add(s1, -s1), origin.add(s1, -s3)))
+            val b = Seq(Line(co2, origin.add(s1, -s3), origin.add(s3, -s3)))
+            val c = Seq(Line(co3, origin.add(s3, -s3), origin.add(s3, -s1)))
+            (a, b, c)
           case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
             ???
           case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
@@ -95,9 +98,17 @@ object Hilbert {
 /*
     val origin = Point(0, 0)
     val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
-*/
-    val origin = Point(0, side)
+
+    val origin = Point(side, side)
     val startDefinition = HilbertDefinition(Orientation.Down, Direction.Clockwise)
+
+    val origin = Point(0, side)
+    val startDefinition = HilbertDefinition(Orientation.Down, Direction.CounterClockwise)
+
+*/
+    val origin = Point(side, side)
+    val startDefinition = HilbertDefinition(Orientation.Down, Direction.Clockwise)
+
     val re = drawRecursive(level, origin, side, startDefinition)
     println(startDefinition)
     println(origin)
