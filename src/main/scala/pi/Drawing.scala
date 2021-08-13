@@ -15,7 +15,7 @@ object Drawing {
   val stroke = 10.0F
 
   def run(): Unit = {
-    val canvas = Canvas(5000, 5000)
+    val canvas = Canvas(100, 100)
     val poligone = Hilbert.draw(1, canvas)
     drawImage(canvas, poligone)
   }
@@ -34,9 +34,11 @@ object Drawing {
     g.fillRect(0, 0, canvas.width, canvas.height)
     g.setStroke(new BasicStroke(stroke))
 
+
+    val h = canvas.height
     poli.foreach { l =>
       g.setColor(l.color)
-      g.drawLine(l.start.x.toInt, l.start.y.toInt, l.end.x.toInt, l.end.y.toInt)
+      g.drawLine(l.start.x.toInt, h - l.start.y.toInt, l.end.x.toInt, h - l.end.y.toInt)
     }
   }
 }

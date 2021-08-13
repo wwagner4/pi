@@ -24,49 +24,63 @@ object Hilbert {
 
   def draw(level: Int, canvas: Canvas): Seq[Line] = {
 
-    val color = ranColor
+    val co1 = Color.RED
+    val co2 = Color.GREEN
+    val co3 = Color.BLUE
 
     def connections(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line]) = {
-      if level <= 0 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
-      else definition match {
-        case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
-          ???
+      if level < 0 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
+      else {
+        val s1 = side / 4.0
+        val s3 = side * 3.0
+        definition match {
+          case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
+            val a = Seq(Line(co1, origin.add(s1, s1), origin.add(s1, s3)))
+            val b = Seq(Line(co2, origin.add(s1, s3), origin.add(s3, s3)))
+            val c = Seq(Line(co3, origin.add(s3, s3), origin.add(s3, s1)))
+            (a, b, c)
+          case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
+            val a = Seq(Line(co1, origin.add(-s1, -s1), origin.add(-s1, -s3)))
+            val b = Seq(Line(co2, origin.add(-s1, -s3), origin.add(-s3, -s3)))
+            val c = Seq(Line(co3, origin.add(- s3, -s3), origin.add(-s3, -s1)))
+            (a, b, c)
+          case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
+            ???
+        }
       }
     }
 
     def sides(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line], Seq[Line]) = {
-      if level <= 1 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
-      else definition match {
-        case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
-          ???
-        case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
-          ???
+      if level < 1 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
+      else {
+        definition match {
+          case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
+            ???
+          case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
+            ???
+        }
       }
     }
 
@@ -77,11 +91,24 @@ object Hilbert {
     }
 
     val side = math.min(canvas.width, canvas.height).toDouble
-    val origin = Point(0, 0)
+    val origin = Point(0, canvas.height)
     val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
-    drawRecursive(level, origin, side, startDefinition)
+    val re = drawRecursive(level, origin, side, startDefinition)
+    println(origin)
+    printPoli(re)
+    re
+  }
 
+  def fmt(d: Double): String = f"${d}%.1f" 
 
+  def fmt(p: Point): String = f"(${fmt(p.x)},${fmt(p.y)})"
+  def fmt(l: Line): String = f"${fmt(l.start)}-${fmt(l.end)}"
+
+  def printPoli(lines: Seq[Line]): Unit = {
+    lines.foreach { l =>
+      println(f"${fmt(l)}")
+
+    }
   }
 
 }
