@@ -7,6 +7,14 @@ import scala.util.Random
 
 object Hilbert {
 
+  enum Orientation:
+    case Up, Down, Left, Right
+
+  enum Direction :
+    case Clockwise, CounterClockwise
+
+  case class HilbertDefinition(orientation: Orientation, direction: Direction)
+
   val colors = Seq(Color.BLACK, Color.BLUE, Color.YELLOW, Color.GREEN, Color.RED, Color.CYAN)
 
   def ranColor: Color = {
@@ -16,78 +24,62 @@ object Hilbert {
 
   def draw(level: Int, canvas: Canvas): Seq[Line] = {
 
-    val color = Color.BLACK
+    val color = ranColor
 
-    def connectDown(level: Int, origin: Point, side: Double) = {
-      val nextSide = side / 2.0
-      val p1 = origin.add(3 * nextSide, 3 * nextSide) 
-      val p2 = origin.add(3 * nextSide, nextSide) 
-      Seq(Line(color, p1, p2))
-    }
-
-    def connectUp(level: Int, origin: Point, side: Double): Seq[Line] = {
-      val nextSide = side / 2.0
-      val p1 = origin.add(nextSide, nextSide) 
-      val p2 = origin.add(nextSide, 3 * nextSide) 
-      Seq(Line(color, p1, p2))
-    }
-
-    def connectRight(level: Int, origin: Point, side: Double) = {
-      val nextSide = side / 2.0
-      val p1 = origin.add(nextSide, nextSide) 
-      val p2 = origin.add(3 * nextSide, nextSide) 
-      Seq(Line(color, p1, p2))
-    }
-
-    def connectLeft(level: Int, origin: Point, side: Double) = {
-      ???
-    }
-
-    def drawUp(level: Int, origin: Point, side: Double): Seq[Line] = {
-      if level <= 0 then Seq.empty[Line]
-      else {
-        val nextSide = side / 2.0
-
-        val c1 = connectUp(level, origin, nextSide)
-        val c2 = connectRight(level, origin, nextSide)
-        val c3 = connectDown(level, origin, nextSide)
-
-        val d1 = drawRight(level - 1, origin, nextSide)
-        val d2 = drawUp(level-1, origin.copy(y= origin.y + nextSide), nextSide)
-        val d3 = drawUp(level-1, origin.copy(y= origin.y + nextSide, x = origin.x + nextSide), nextSide)
-        val d4 = drawLeft(level - 1, origin.copy(x = origin.x + nextSide), nextSide)
-
-        d1 ++ c1 ++ d2 ++ c2 ++ d3 ++ c3 ++ d4
+    def connections(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line]) = {
+      if level <= 0 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
+      else definition match {
+        case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
+          ???
       }
     }
 
-    def drawDown(level: Int, origin: Point, side: Double): Seq[Line] = {
-      if level <= 0 then Seq.empty[Line]
-      else {
-        val nextSide = side / 2.0
-        ???
+    def sides(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line], Seq[Line]) = {
+      if level <= 1 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
+      else definition match {
+        case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
+          ???
+        case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
+          ???
       }
     }
 
-    def drawRight(level: Int, origin: Point, side: Double): Seq[Line] = {
-      if level <= 0 then Seq.empty[Line]
-      else {
-        val nextSide = side / 2.0
-        ???
-      }
-    }
-
-    def drawLeft(level: Int, origin: Point, side: Double): Seq[Line] = {
-      if level <= 0 then Seq.empty[Line]
-      else {
-        val nextSide = side / 2.0
-        ???
-      }
+    def drawRecursive(level: Int, origin: Point, side: Double, definition: HilbertDefinition): Seq[Line] = {
+      val (c1, c2, c3) = connections(level - 1, origin, side, definition)
+      val (s1, s2, s3, s4) = sides(level - 1, origin, side, definition)
+      s1 ++ c1 ++ s2 ++ c2 ++ s3 ++ c3 ++ s4
     }
 
     val side = math.min(canvas.width, canvas.height).toDouble
     val origin = Point(0, 0)
-    drawUp(level, origin, side)
+    val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
+    drawRecursive(level, origin, side, startDefinition)
 
 
   }
