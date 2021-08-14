@@ -40,25 +40,40 @@ object Hilbert {
             val c = Seq(Line(co3, origin.add(s3, s3), origin.add(s3, s1)))
             (a, b, c)
           case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
-            val a = Seq(Line(co1, origin.add(-s1, -s1), origin.add(-s1, -s3)))
-            val b = Seq(Line(co2, origin.add(-s1, -s3), origin.add(-s3, -s3)))
-            val c = Seq(Line(co3, origin.add(-s3, -s3), origin.add(-s3, -s1)))
+            val a = Seq(Line(co1, origin.add(s3, s3), origin.add(s3, s1)))
+            val b = Seq(Line(co2, origin.add(s3, s1), origin.add(s1, s1)))
+            val c = Seq(Line(co3, origin.add(s1, s1), origin.add(s1, s3)))
             (a, b, c)
           case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
-            ???
+            val a = Seq(Line(co1, origin.add(s1, s3), origin.add(s3, s3)))
+            val b = Seq(Line(co2, origin.add(s3, s3), origin.add(s3, s1)))
+            val c = Seq(Line(co3, origin.add(s3, s1), origin.add(s1, s1)))
+            (a, b, c)
           case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
-            ???
+            val a = Seq(Line(co1, origin.add(s3, s1), origin.add(s1, s1)))
+            val b = Seq(Line(co2, origin.add(s1, s1), origin.add(s1, s3)))
+            val c = Seq(Line(co3, origin.add(s1, s3), origin.add(s3, s3)))
+            (a, b, c)
           case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
-            ???
+            val a = Seq(Line(co1, origin.add(s3, s1), origin.add(s3, s3)))
+            val b = Seq(Line(co2, origin.add(s3, s3), origin.add(s1, s3)))
+            val c = Seq(Line(co3, origin.add(s1, s3), origin.add(s1, s1)))
+            (a, b, c)
           case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
-            val a = Seq(Line(co1, origin.add(s1, -s1), origin.add(s1, -s3)))
-            val b = Seq(Line(co2, origin.add(s1, -s3), origin.add(s3, -s3)))
-            val c = Seq(Line(co3, origin.add(s3, -s3), origin.add(s3, -s1)))
+            val a = Seq(Line(co1, origin.add(s1, s3), origin.add(s1, s1)))
+            val b = Seq(Line(co2, origin.add(s1, s1), origin.add(s3, s1)))
+            val c = Seq(Line(co3, origin.add(s3, s1), origin.add(s3, s3)))
             (a, b, c)
           case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
-            ???
+            val a = Seq(Line(co1, origin.add(s1, s1), origin.add(s3, s1)))
+            val b = Seq(Line(co2, origin.add(s3, s1), origin.add(s3, s3)))
+            val c = Seq(Line(co3, origin.add(s3, s3), origin.add(s1, s3)))
+            (a, b, c)
           case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
-            ???
+            val a = Seq(Line(co1, origin.add(s3, s3), origin.add(s1, s3)))
+            val b = Seq(Line(co2, origin.add(s1, s3), origin.add(s1, s1)))
+            val c = Seq(Line(co3, origin.add(s1, s1), origin.add(s3, s1)))
+            (a, b, c)
         }
       }
     }
@@ -95,19 +110,17 @@ object Hilbert {
 
     val side = math.min(canvas.width, canvas.height).toDouble
 
-/*
     val origin = Point(0, 0)
-    val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
 
-    val origin = Point(side, side)
-    val startDefinition = HilbertDefinition(Orientation.Down, Direction.Clockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Down, Direction.Clockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Right, Direction.Clockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Left, Direction.Clockwise)
 
-    val origin = Point(0, side)
-    val startDefinition = HilbertDefinition(Orientation.Down, Direction.CounterClockwise)
-
-*/
-    val origin = Point(side, side)
-    val startDefinition = HilbertDefinition(Orientation.Down, Direction.Clockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Up, Direction.CounterClockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Down, Direction.CounterClockwise)
+    //val startDefinition = HilbertDefinition(Orientation.Right, Direction.CounterClockwise)
+    val startDefinition = HilbertDefinition(Orientation.Left, Direction.CounterClockwise)
 
     val re = drawRecursive(level, origin, side, startDefinition)
     println(startDefinition)
