@@ -29,6 +29,7 @@ object Hilbert {
     val co3 = Color.BLUE
 
     def connections(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line]) = {
+      println(s"connections $level $origin $side $definition")
       if level < 0 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
       else {
         val s1 = side / 4.0
@@ -79,11 +80,18 @@ object Hilbert {
     }
 
     def sides(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line], Seq[Line]) = {
+      println(s"sides $level")
       if level < 1 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
       else {
+        val s1 = side / 4.0
+        val s3 = s1 * 2.0
         definition match {
           case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
-            ???
+            val a = drawRecursive(level, origin, side / 2.0, HilbertDefinition(Orientation.Right, Direction.Clockwise))
+            val b = drawRecursive(level, origin.add(0, s3), side / 2.0, HilbertDefinition(Orientation.Up, Direction.Clockwise))
+            val c = drawRecursive(level, origin.add(s3, s3), side / 2.0, HilbertDefinition(Orientation.Up, Direction.Clockwise))
+            val d = drawRecursive(level, origin.add(s3, 0), side / 2.0, HilbertDefinition(Orientation.Left, Direction.CounterClockwise))
+            (a, b, c, d)
           case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
             ???
           case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
@@ -103,6 +111,7 @@ object Hilbert {
     }
 
     def drawRecursive(level: Int, origin: Point, side: Double, definition: HilbertDefinition): Seq[Line] = {
+      println(s"drawRecusive $level $side")
       val (c1, c2, c3) = connections(level - 1, origin, side, definition)
       val (s1, s2, s3, s4) = sides(level - 1, origin, side, definition)
       s1 ++ c1 ++ s2 ++ c2 ++ s3 ++ c3 ++ s4
@@ -112,15 +121,7 @@ object Hilbert {
 
     val origin = Point(0, 0)
 
-    //val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
-    //val startDefinition = HilbertDefinition(Orientation.Down, Direction.Clockwise)
-    //val startDefinition = HilbertDefinition(Orientation.Right, Direction.Clockwise)
-    //val startDefinition = HilbertDefinition(Orientation.Left, Direction.Clockwise)
-
-    //val startDefinition = HilbertDefinition(Orientation.Up, Direction.CounterClockwise)
-    //val startDefinition = HilbertDefinition(Orientation.Down, Direction.CounterClockwise)
-    //val startDefinition = HilbertDefinition(Orientation.Right, Direction.CounterClockwise)
-    val startDefinition = HilbertDefinition(Orientation.Left, Direction.CounterClockwise)
+    val startDefinition = HilbertDefinition(Orientation.Up, Direction.Clockwise)
 
     val re = drawRecursive(level, origin, side, startDefinition)
     println(startDefinition)
@@ -138,7 +139,6 @@ object Hilbert {
   def printPoli(lines: Seq[Line]): Unit = {
     lines.foreach { l =>
       println(f"${fmt(l)}")
-
     }
   }
 

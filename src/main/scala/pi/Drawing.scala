@@ -12,11 +12,11 @@ import scala.util.Random
 
 object Drawing {
 
-  val stroke = 10.0F
+  val stroke = 2.0F
 
   def run(): Unit = {
     val canvas = Canvas(100, 100)
-    val poligone = Hilbert.draw(1, canvas)
+    val poligone = Hilbert.draw(2, canvas)
     drawImage(canvas, poligone)
   }
 
