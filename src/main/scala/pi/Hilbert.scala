@@ -15,6 +15,10 @@ object Hilbert {
 
   case class HilbertDefinition(orientation: Orientation, direction: Direction)
 
+  enum Connection :
+    case LeftUp, LeftDown, RightUp, RightDown, TopRight, TopLeft, BottomRight, BottomLeft 
+
+
   val colors = Seq(Color.BLACK, Color.BLUE, Color.YELLOW, Color.GREEN, Color.RED, Color.CYAN)
 
   def ranColor: Color = {
@@ -24,56 +28,69 @@ object Hilbert {
 
   def draw(level: Int, canvas: Canvas): Seq[Line] = {
 
-    val co1 = Color.RED
-    val co2 = Color.GREEN
-    val co3 = Color.BLUE
+    val col1 = Color.RED
+    val col2 = Color.GREEN
+    val col3 = Color.BLUE
+
+    def line(color: Color, connection: Connection, level: Int, origin: Point, side: Double): Line = {
+      val s1 = side / 4.0
+      val s3 = s1 * 3.0
+      connection match {
+        case Connection.LeftUp => Line(color, origin.add(s1, s1), origin.add(s1, s3)) 
+        case Connection.LeftDown => Line(color, origin.add(s1, s3), origin.add(s1, s1))
+        case Connection.RightUp => Line(color, origin.add(s3, s1), origin.add(s3, s3))
+        case Connection.RightDown => Line(color, origin.add(s3, s3), origin.add(s3, s1))
+        case Connection.TopRight => Line(color, origin.add(s1, s3), origin.add(s3, s3))
+        case Connection.TopLeft => Line(color, origin.add(s3, s3), origin.add(s1, s3))
+        case Connection.BottomRight => Line(color, origin.add(s1, s1), origin.add(s3, s1))
+        case Connection.BottomLeft => Line(color, origin.add(s3, s1), origin.add(s1, s1))
+      }
+    }
 
     def connections(level: Int, origin: Point, side: Double, definition: HilbertDefinition): (Seq[Line], Seq[Line], Seq[Line]) = {
       println(s"connections $level $origin $side $definition")
       if level < 0 then (Seq.empty[Line], Seq.empty[Line], Seq.empty[Line])
       else {
-        val s1 = side / 4.0
-        val s3 = s1 * 3.0
         definition match {
           case HilbertDefinition(Orientation.Up, Direction.Clockwise) => 
-            val a = Seq(Line(co1, origin.add(s1, s1), origin.add(s1, s3)))
-            val b = Seq(Line(co2, origin.add(s1, s3), origin.add(s3, s3)))
-            val c = Seq(Line(co3, origin.add(s3, s3), origin.add(s3, s1)))
+            val a = Seq(line(col1, Connection.LeftUp, level, origin, side))
+            val b = Seq(line(col2, Connection.TopRight, level, origin, side))
+            val c = Seq(line(col3, Connection.RightDown, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Down, Direction.Clockwise) => 
-            val a = Seq(Line(co1, origin.add(s3, s3), origin.add(s3, s1)))
-            val b = Seq(Line(co2, origin.add(s3, s1), origin.add(s1, s1)))
-            val c = Seq(Line(co3, origin.add(s1, s1), origin.add(s1, s3)))
+            val a = Seq(line(col1, Connection.RightDown, level, origin, side))
+            val b = Seq(line(col2, Connection.BottomLeft, level, origin, side))
+            val c = Seq(line(col3, Connection.LeftUp, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Right, Direction.Clockwise) => 
-            val a = Seq(Line(co1, origin.add(s1, s3), origin.add(s3, s3)))
-            val b = Seq(Line(co2, origin.add(s3, s3), origin.add(s3, s1)))
-            val c = Seq(Line(co3, origin.add(s3, s1), origin.add(s1, s1)))
+            val a = Seq(line(col1, Connection.TopRight, level, origin, side))
+            val b = Seq(line(col2, Connection.RightDown, level, origin, side))
+            val c = Seq(line(col3, Connection.BottomLeft, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Left, Direction.Clockwise) => 
-            val a = Seq(Line(co1, origin.add(s3, s1), origin.add(s1, s1)))
-            val b = Seq(Line(co2, origin.add(s1, s1), origin.add(s1, s3)))
-            val c = Seq(Line(co3, origin.add(s1, s3), origin.add(s3, s3)))
+            val a = Seq(line(col1, Connection.TopLeft, level, origin, side))
+            val b = Seq(line(col2, Connection.LeftDown, level, origin, side))
+            val c = Seq(line(col3, Connection.BottomRight, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Up, Direction.CounterClockwise) => 
-            val a = Seq(Line(co1, origin.add(s3, s1), origin.add(s3, s3)))
-            val b = Seq(Line(co2, origin.add(s3, s3), origin.add(s1, s3)))
-            val c = Seq(Line(co3, origin.add(s1, s3), origin.add(s1, s1)))
+            val a = Seq(line(col1, Connection.RightUp, level, origin, side))
+            val b = Seq(line(col2, Connection.TopLeft, level, origin, side))
+            val c = Seq(line(col3, Connection.LeftDown, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Down, Direction.CounterClockwise) => 
-            val a = Seq(Line(co1, origin.add(s1, s3), origin.add(s1, s1)))
-            val b = Seq(Line(co2, origin.add(s1, s1), origin.add(s3, s1)))
-            val c = Seq(Line(co3, origin.add(s3, s1), origin.add(s3, s3)))
+            val a = Seq(line(col1, Connection.RightUp, level, origin, side))
+            val b = Seq(line(col2, Connection.TopLeft, level, origin, side))
+            val c = Seq(line(col3, Connection.LeftDown, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Right, Direction.CounterClockwise) => 
-            val a = Seq(Line(co1, origin.add(s1, s1), origin.add(s3, s1)))
-            val b = Seq(Line(co2, origin.add(s3, s1), origin.add(s3, s3)))
-            val c = Seq(Line(co3, origin.add(s3, s3), origin.add(s1, s3)))
+            val a = Seq(line(col1, Connection.BottomRight, level, origin, side))
+            val b = Seq(line(col2, Connection.RightUp, level, origin, side))
+            val c = Seq(line(col3, Connection.TopLeft, level, origin, side))
             (a, b, c)
           case HilbertDefinition(Orientation.Left, Direction.CounterClockwise) => 
-            val a = Seq(Line(co1, origin.add(s3, s3), origin.add(s1, s3)))
-            val b = Seq(Line(co2, origin.add(s1, s3), origin.add(s1, s1)))
-            val c = Seq(Line(co3, origin.add(s1, s1), origin.add(s3, s1)))
+            val a = Seq(line(col1, Connection.TopLeft, level, origin, side))
+            val b = Seq(line(col2, Connection.LeftDown, level, origin, side))
+            val c = Seq(line(col3, Connection.BottomRight, level, origin, side))
             (a, b, c)
         }
       }
