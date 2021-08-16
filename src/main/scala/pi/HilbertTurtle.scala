@@ -23,6 +23,7 @@ object HilbertTurtle {
             }
             this._path = Line(Color.BLACK, a, b) :: this._path
             this._position = b
+            println(s"fw ${this._position}")
             this
         }
 
@@ -33,6 +34,7 @@ object HilbertTurtle {
                 case Direction.Right => this._direction = Direction.Down
                 case Direction.Left => this._direction = Direction.Up
             }
+            println(s"tr ${this._direction}")
             this
         }
 
@@ -43,6 +45,7 @@ object HilbertTurtle {
                 case Direction.Right => this._direction = Direction.Up
                 case Direction.Left => this._direction = Direction.Down
             }
+            println(s"tl ${this._direction}")
             this
         }
     }
@@ -51,17 +54,28 @@ object HilbertTurtle {
     def draw(level: Int, canvas: Canvas): Seq[Line] = {
 
         val len = 10
-        val turtle = 
-            Turtle(Direction.Up, Point(canvas.width / 2.0, canvas.height / 2.0))
-                .forward(len)
-                .turnRight   
-                .forward(len)
-                .turnRight   
-                .forward(len)
+        def drawr(level: Int, turtle: Turtle): Unit = {
+            if level == 0 then turtle.turnRight.turnRight
+            else {
+                turtle.turnRight
+                drawr(level - 1, turtle)
+                turtle.turnRight.forward(len)
+                drawr(level - 1, turtle)
+                turtle.turnLeft.forward(len).turnLeft   
+                drawr(level - 1, turtle)
+                turtle.forward(len).turnRight
+                drawr(level - 1, turtle)
+                turtle.turnRight
+            }
+        } 
 
-        val re = turtle._path.reverse
-        println(re)
-        re
+        val turtle = Turtle(Direction.Up, 
+                            Point(canvas.width / 2.0, 
+                                  canvas.height / 2.0))
+
+        drawr(level, turtle)
+
+        turtle._path.reverse
     }
 
 }

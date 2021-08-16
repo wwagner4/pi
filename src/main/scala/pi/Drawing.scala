@@ -16,7 +16,7 @@ object Drawing {
 
   def run(): Unit = {
     val canvas = Canvas(100, 100)
-    val poligone = HilbertTurtle.draw(2, canvas)
+    val poligone = HilbertTurtle.draw(1, canvas)
     drawImage(canvas, poligone)
   }
 
