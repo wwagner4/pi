@@ -55,15 +55,18 @@ object HilbertTurtle {
 
         val len = 10
         def drawr(level: Int, turtle: Turtle): Unit = {
-            if level == 0 then turtle.turnRight.turnRight
-            else {
+            if level >= 0 then {
                 turtle.turnRight
                 drawr(level - 1, turtle)
-                turtle.turnRight.forward(len)
+                turtle.turnRight
+                if level > 0 then turtle.forward(len)
                 drawr(level - 1, turtle)
-                turtle.turnLeft.forward(len).turnLeft   
+                turtle.turnLeft
+                if level > 0 then turtle.forward(len)
+                turtle.turnLeft   
                 drawr(level - 1, turtle)
-                turtle.forward(len).turnRight
+                if level > 0 then turtle.forward(len)
+                turtle.turnRight
                 drawr(level - 1, turtle)
                 turtle.turnRight
             }
