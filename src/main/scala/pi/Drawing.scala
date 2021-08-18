@@ -12,7 +12,7 @@ import scala.util.Random
 
 object Drawing {
 
-  val stroke = 1.0F
+  val stroke = 3.0F
 
   def run(): Unit = {
     val canvas = Canvas(3000, 3000)

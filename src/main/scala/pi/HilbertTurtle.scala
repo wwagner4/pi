@@ -13,7 +13,7 @@ object HilbertTurtle {
         var _position: Point = position 
         var _path: List[Line] = List() 
 
-        def forward(len: Double, level: Int): Turtle = {
+        def forward(len: Double): Turtle = {
             val a = this._position
             val b = this._direction match {
                 case Direction.Up => this._position.add(0, len)
@@ -23,29 +23,26 @@ object HilbertTurtle {
             }
             this._path = Line(Color.BLACK, a, b) :: this._path
             this._position = b
-            println(s"$level fw ${this._position}")
             this
         }
 
-        def turnRight(level: Int): Turtle = {
+        def turnRight: Turtle = {
             this._direction match {
                 case Direction.Up => this._direction = Direction.Right
                 case Direction.Down => this._direction = Direction.Left
                 case Direction.Right => this._direction = Direction.Down
                 case Direction.Left => this._direction = Direction.Up
             }
-            println(s"$level tr ${this._direction}")
             this
         }
 
-        def turnLeft(level: Int): Turtle = {
+        def turnLeft: Turtle = {
             this._direction match {
                 case Direction.Up => this._direction = Direction.Left
                 case Direction.Down => this._direction = Direction.Right
                 case Direction.Right => this._direction = Direction.Up
                 case Direction.Left => this._direction = Direction.Down
             }
-            println(s"$level tl ${this._direction}")
             this
         }
     }
@@ -60,37 +57,37 @@ object HilbertTurtle {
 
         def drawClockwise(level: Int, turtle: Turtle): Unit = {
             if level >= 0 then {
-                turtle.turnRight(level)
+                turtle.turnRight
                 drawCounterClockwise(level - 1, turtle)
-                turtle.turnRight(level)
-                if level > 0 then turtle.forward(len, level)
+                turtle.turnRight
+                if level > 0 then turtle.forward(len)
                 drawClockwise(level - 1, turtle)
-                turtle.turnLeft(level)
-                if level > 0 then turtle.forward(len, level)
-                turtle.turnLeft(level)   
+                turtle.turnLeft
+                if level > 0 then turtle.forward(len)
+                turtle.turnLeft  
                 drawClockwise(level - 1, turtle)
-                if level > 0 then turtle.forward(len, level)
-                turtle.turnRight(level)
+                if level > 0 then turtle.forward(len)
+                turtle.turnRight
                 drawCounterClockwise(level - 1, turtle)
-                turtle.turnRight(level)
+                turtle.turnRight
             }
         } 
 
         def drawCounterClockwise(level: Int, turtle: Turtle): Unit = {
             if level >= 0 then {
-                turtle.turnLeft(level)
+                turtle.turnLeft
                 drawClockwise(level - 1, turtle)
-                turtle.turnLeft(level)
-                if level > 0 then turtle.forward(len, level)
+                turtle.turnLeft
+                if level > 0 then turtle.forward(len)
                 drawCounterClockwise(level - 1, turtle)
-                turtle.turnRight(level)
-                if level > 0 then turtle.forward(len, level)
-                turtle.turnRight(level)   
+                turtle.turnRight
+                if level > 0 then turtle.forward(len)
+                turtle.turnRight
                 drawCounterClockwise(level - 1, turtle)
-                if level > 0 then turtle.forward(len, level)
-                turtle.turnLeft(level)
+                if level > 0 then turtle.forward(len)
+                turtle.turnLeft
                 drawClockwise(level - 1, turtle)
-                turtle.turnLeft(level)
+                turtle.turnLeft
             }
         } 
 
