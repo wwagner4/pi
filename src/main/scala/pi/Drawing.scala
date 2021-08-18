@@ -15,8 +15,8 @@ object Drawing {
   val stroke = 2.0F
 
   def run(): Unit = {
-    val canvas = Canvas(100, 100)
-    val poligone = HilbertTurtle.draw(2, canvas)
+    val canvas = Canvas(1000, 1000)
+    val poligone = HilbertTurtle.draw(5, canvas)
     drawImage(canvas, poligone)
   }
 
