@@ -53,7 +53,11 @@ object HilbertTurtle {
 
     def draw(level: Int, canvas: Canvas): Seq[Line] = {
 
-        val len = 10
+        val w = math.min(canvas.width, canvas.height)
+        val l = math.pow(2, level)                    
+        val len = w.toDouble / l
+        val turtle = Turtle(Direction.Up, Point(len / 2, len / 2))
+
         def drawClockwise(level: Int, turtle: Turtle): Unit = {
             if level >= 0 then {
                 turtle.turnRight(level)
@@ -90,9 +94,6 @@ object HilbertTurtle {
             }
         } 
 
-        val turtle = Turtle(Direction.Up, 
-                            Point(canvas.width / 2.0, 
-                                  canvas.height / 2.0))
 
         drawClockwise(level, turtle)
 
