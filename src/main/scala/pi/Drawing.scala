@@ -11,11 +11,11 @@ import scala.util.Random
 
 object Drawing {
 
-  class CanvasAwt(val id: String, val width: Int, val height: Int, stroke: Double) extends Canvas {
+  class CanvasAwt(val id: String, val width: Int, val height: Int, stroke: Double, background: Color) extends Canvas {
 
     val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR)
     val graphics = image.getGraphics.asInstanceOf[Graphics2D]
-    graphics.setColor(Color.WHITE)
+    graphics.setColor(background)
     graphics.fillRect(0, 0, width, height)
     graphics.setStroke(new BasicStroke(stroke.toFloat))
 
@@ -34,9 +34,9 @@ object Drawing {
 
   }
 
-  def run(piConfig: PiConfig): Unit = {
-    val canvas: Canvas = CanvasAwt(piConfig.id, piConfig.width, piConfig.width, piConfig.stroke)
-    HilbertTurtle.draw(piConfig.depth, canvas, piConfig.colors)
+  def run(cfg: PiConfig): Unit = {
+    val canvas: Canvas = CanvasAwt(cfg.id, cfg.width, cfg.width, cfg.stroke, cfg.background)
+    HilbertTurtle.draw(cfg.depth, canvas, cfg.colors)
     canvas.close()
   }
 
