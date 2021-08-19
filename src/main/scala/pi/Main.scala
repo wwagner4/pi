@@ -12,7 +12,12 @@ object Main {
 
   case class Line(color: Color, start: Point, end:Point)
 
-  case class Canvas(width: Int, height: Int)
+  trait Canvas {
+    def width: Int
+    def height: Int
+    def line(color: Color, from: Point, to: Point): Unit
+    def close(): Unit
+  }
 
   def main(args: Array[String]): Unit ={
     Drawing.run()

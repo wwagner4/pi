@@ -14,11 +14,33 @@ object Drawing {
 
   val stroke = 3.0F
 
-  def run(): Unit = {
-    val canvas = Canvas(3000, 3000)
-    val poligone = HilbertTurtle.draw(8, canvas)
-    drawImage(canvas, poligone)
+  class CanvasAwt(val width: Int, val height: Int) extends Canvas {
+
+    val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR)
+    val graphics = image.getGraphics.asInstanceOf[Graphics2D]
+    graphics.setColor(Color.WHITE)
+    graphics.fillRect(0, 0, width, height)
+    graphics.setStroke(new BasicStroke(stroke))
+
+
+    def line(color: Color, from: Point, to: Point): Unit = {
+      ???
+    }
+
+    def close(): Unit = {
+      ???
+    }
+
+
   }
+
+  def run(): Unit = {
+    val canvas: Canvas = CanvasAwt(3000, 3000)
+    HilbertTurtle.draw(8, canvas)
+  }
+
+
+
 
   private def drawImage(canvas: Canvas, poligone: Seq[Line]) = {
     val image = new BufferedImage(canvas.width, canvas.height, BufferedImage.TYPE_INT_BGR)
