@@ -1,6 +1,6 @@
 package pi
 
-import pi.Main.{Line, Point, Canvas}
+import pi.Main.{Canvas, Line, PiConfig, Point}
 
 import java.awt.{BasicStroke, Color, Graphics2D}
 import java.awt.image.BufferedImage
@@ -9,18 +9,15 @@ import javax.imageio.ImageIO
 import scala.util.Random
 
 
-
 object Drawing {
 
-  val stroke = 3.0F
-
-  class CanvasAwt(val width: Int, val height: Int) extends Canvas {
+  class CanvasAwt(val id: String, val width: Int, val height: Int, stroke: Double) extends Canvas {
 
     val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR)
     val graphics = image.getGraphics.asInstanceOf[Graphics2D]
     graphics.setColor(Color.WHITE)
     graphics.fillRect(0, 0, width, height)
-    graphics.setStroke(new BasicStroke(stroke))
+    graphics.setStroke(new BasicStroke(stroke.toFloat))
 
 
     def line(color: Color, from: Point, to: Point): Unit = {
@@ -29,18 +26,17 @@ object Drawing {
     }
 
     def close(): Unit = {
-    val outFile = Path.of("target/a.png").toFile
-    ImageIO.write(image, "png", outFile)
-    println(s"wrote image to ${outFile.getAbsolutePath}")
+      val outFile = Path.of(s"target/$id.png").toFile
+      ImageIO.write(image, "png", outFile)
+      println(s"wrote image to ${outFile.getAbsolutePath}")
     }
 
 
   }
 
-  def run(): Unit = {
-    val canvas: Canvas = CanvasAwt(3000, 3000)
-    val colors = ColorIterator.random
-    HilbertTurtle.draw(8, canvas, colors)
+  def run(piConfig: PiConfig): Unit = {
+    val canvas: Canvas = CanvasAwt(piConfig.id, piConfig.width, piConfig.width, piConfig.stroke)
+    HilbertTurtle.draw(piConfig.depth, canvas, piConfig.colors)
     canvas.close()
   }
 
