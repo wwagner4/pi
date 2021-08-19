@@ -39,7 +39,8 @@ object Drawing {
 
   def run(): Unit = {
     val canvas: Canvas = CanvasAwt(3000, 3000)
-    HilbertTurtle.draw(8, canvas)
+    val colors = ColorIterator.random
+    HilbertTurtle.draw(8, canvas, colors)
     canvas.close()
   }
 

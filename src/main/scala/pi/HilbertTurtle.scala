@@ -8,10 +8,9 @@ object HilbertTurtle {
     enum Direction :
         case Up, Down, Right, Left
 
-    class Turtle(canvas: Canvas, direction: Direction, position: Point) {
-        var _direction: Direction = direction 
-        var _position: Point = position 
-        var _canvas: Canvas = canvas
+    class Turtle(canvas: Canvas, colors: Iterator[Color], startDirection: Direction, startPosition: Point) {
+        var _direction: Direction = startDirection
+        var _position: Point = startPosition
 
         def forward(len: Double): Turtle = {
             val a = this._position
@@ -21,7 +20,7 @@ object HilbertTurtle {
                 case Direction.Right => this._position.add(len, 0)
                 case Direction.Left => this._position.add(-len, 0)
             }
-            canvas.line(Color.BLACK, a, b)
+            canvas.line(colors.next(), a, b)
             this._position = b
             this
         }
@@ -48,12 +47,12 @@ object HilbertTurtle {
     }
 
 
-    def draw(level: Int, canvas: Canvas): Unit = {
+    def draw(level: Int, canvas: Canvas, colorIterator: Iterator[Color]): Unit = {
 
         val w = math.min(canvas.width, canvas.height)
         val l = math.pow(2, level)                    
         val len = w.toDouble / l
-        val turtle = Turtle(canvas, Direction.Up, Point(len / 2, len / 2))
+        val turtle = Turtle(canvas, colorIterator, Direction.Up, Point(len / 2, len / 2))
 
         def drawClockwise(level: Int, turtle: Turtle): Unit = {
             if level >= 0 then {
