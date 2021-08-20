@@ -4,6 +4,8 @@ import pi.ColorIterator.colorHue
 
 import java.awt.Color
 
+import org.rogach.scallop._
+
 object Main {
 
   case class Point(x: Double, y: Double) {
@@ -44,9 +46,23 @@ object Main {
     PiConfig("inc-color-hue", 6, 1 * baseSize, 10, Color.BLACK, ColorIterator.increasing(ColorIterator.seqColorHue)(9))
   )
 
-  def main(args: Array[String]): Unit = {
-    val cfg = cfgs.filter(_.id == "inc-color-hue").head
-    Drawing.run(cfg)
+  class Conf(arguments: Array[String]) extends ScallopConf(arguments) {
+
+    def piConfigValidation(id: String): Boolean = {
+      cfgs.map(_.id).contains(id)
+    }
+    def piConfigDescr(): String = {
+      val ids = cfgs.map(_.id).mkString(", ")
+      s"one of [$ids]"
+    }
+
+    val piconfig = trailArg[String](name ="id", required = true, validate = piConfigValidation, descr=piConfigDescr())
+    verify()
   }
 
+  def main(args: Array[String]): Unit = {
+    val conf = new Conf(args)
+    val cfg = cfgs.filter(_.id == conf.piconfig()).head
+    Drawing.run(cfg)
+  }
 }
