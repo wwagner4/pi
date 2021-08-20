@@ -76,7 +76,7 @@ object Main {
         Drawing.run(cfg)
 
       case conf.tryout =>
-        println("tryout")
+        Tryout.curveLength()
     })
   }
 }
