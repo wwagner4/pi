@@ -1,10 +1,9 @@
 # pi
 
-visualize pi 
+Idea of this project was to visualize pi by means of a hilbert polygon
 
-# Length of a hilbert poligon
+# Length of a hilbert polygon
 
-Number of lines for hilbert poligon per depth
 ```
 +---------+---------------------+
 | depth   | lengh               |
@@ -33,4 +32,14 @@ Number of lines for hilbert poligon per depth
 |      22 |   17.592.186.044.415|
 |      23 |   70.368.744.177.663|
 +---------+---------------------+
+```
+# Resources for math constants
+
+https://archive.org/details/Math_Constants
+
+## Performance of reading digits from text files.
+
+```
+  100,000,000 - 12s
+1,000,000,000 - 92s
 ```

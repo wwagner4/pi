@@ -4,13 +4,32 @@ import pi.Main.{Canvas, Point}
 
 import java.awt.image.BufferedImage
 import java.awt.{BasicStroke, Color, Graphics2D}
-import java.nio.file.Path
+import java.nio.file.{Files, Path}
 import javax.imageio.ImageIO
+import scala.io.Source
 import scala.util.Random
 
 object Tryout {
 
-  def curveLength(): Unit = {
+  def treatmentOfBigConstantsInFiles(): Unit = {
+    val home = System.getProperty("user.home")
+    val work = Path.of(home, "work", "pi")
+    val piFile = work.resolve("pi.txt")
+    require(Files.exists(piFile), s"file must exist $piFile")
+    println(piFile)
+    Source.fromFile(piFile.toFile)
+      .iterator
+      .filter(_.isDigit)
+      .zipWithIndex
+      .take(1_100_000_000)
+      .foreach{ (c, i) =>
+        if i % 10_100_000 == 0 then println(s"read another 100,000,000 ${i} $c")
+      }
+      println("read 100,000,000 numbers")
+
+  }
+
+  def lengthOfHilbertPolygon(): Unit = {
 
     class CanvasCount() extends Canvas {
       var count = 0
