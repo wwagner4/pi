@@ -12,5 +12,5 @@ lazy val root = project
     libraryDependencies += "com.lihaoyi" %% "upickle" % "1.4.0",
     libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.3",
     libraryDependencies += "org.rogach" %% "scallop" % "4.0.4",
-
+    libraryDependencies += "org.imgscalr" % "imgscalr-lib" % "4.2"
   )

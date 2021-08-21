@@ -2,6 +2,10 @@
 
 Idea of this project was to visualize pi by means of a hilbert polygon
 
+## Results
+
+[![demo1-thumb](src/main/resources/demo1-thumb.png)](src/main/resources/demo1.png)
+
 # Length of a hilbert polygon
 
 ```

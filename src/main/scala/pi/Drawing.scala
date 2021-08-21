@@ -1,5 +1,6 @@
 package pi
 
+import org.imgscalr.Scalr
 import pi.Main.{Canvas, Line, PiConfig, Point}
 
 import java.awt.{BasicStroke, Color, Graphics2D}
@@ -28,7 +29,14 @@ object Drawing {
     def close(): Unit = {
       val outFile = Path.of(s"target/$id.png").toFile
       ImageIO.write(image, "png", outFile)
-      println(s"wrote image to ${outFile.getAbsolutePath}")
+      println(s"Wrote image to ${outFile.getAbsolutePath}")
+
+      val thumb = Scalr.resize(image, Scalr.Method.BALANCED, 300, 300);
+      val thumbFile = Path.of(s"target/$id-thumb.png").toFile
+      ImageIO.write(thumb, "png", thumbFile)
+      println(s"Wrote thumbnail image to ${thumbFile.getAbsolutePath}")
+
+
     }
 
 
