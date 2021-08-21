@@ -5,6 +5,7 @@ Idea of this project was to visualize pi by means of a hilbert polygon
 ## Results
 
 [![demo1-thumb](src/main/resources/demo1-thumb.png)](src/main/resources/demo1.png)
+[![demo1-thumb](src/main/resources/inc-color-hue-long-XL-thumb.png)](src/main/resources/inc-color-hue-long-XL.png)
 
 # Length of a hilbert polygon
 
