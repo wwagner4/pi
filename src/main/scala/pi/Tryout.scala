@@ -17,11 +17,9 @@ object Tryout {
     val piFile = work.resolve("pi.txt")
     require(Files.exists(piFile), s"file must exist $piFile")
     println(piFile)
-    Source.fromFile(piFile.toFile)
-      .iterator
-      .filter(_.isDigit)
+    Util.digitsFromFile(piFile)
       .zipWithIndex
-      .take(1_100_000_000)
+      .take(100_000_000)
       .foreach{ (c, i) =>
         if i % 10_100_000 == 0 then println(s"read another 100,000,000 ${i} $c")
       }
