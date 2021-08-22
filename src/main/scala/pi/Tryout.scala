@@ -1,6 +1,6 @@
 package pi
 
-import pi.Main.{Canvas, PiConfig, Point}
+import pi.Main.{Canvas, DrawConfig, Point}
 
 import java.awt.image.BufferedImage
 import java.awt.{BasicStroke, Color, Graphics2D}
@@ -8,25 +8,22 @@ import java.nio.file.{Files, Path}
 import javax.imageio.ImageIO
 import scala.io.Source
 import scala.util.Random
-import scala.collection.parallel.CollectionConverters._
 
 object Tryout {
 
-  def analyseMinimalResolution(): Unit = {
-    (1 to 6).par.foreach { depth =>
-      val width = math.pow(2, depth + 1).toInt + 1
-      val cfg = PiConfig(s"resa$depth", depth, width, 1, Color.WHITE, ColorIterator.increasing(ColorIterator.seqColorHue)(9), createThumbnail = false)
+  def doIt(): Unit = drawMinimumSize()
+  
+  def drawMinimumSize(): Unit = {
+    Seq(9, 10, 11, 12).foreach { depth =>
+      val size = Util.minCanvasSizeForDepth(depth)
+      val colors = ColorIterator.pi (ColorIterator.seqColorBright3)
+      val cfg = DrawConfig(s"reso-$depth-$size", depth, size, 1, Color.BLACK, colors)
       Drawing.run(cfg)
     }
   }
 
   def treatmentOfBigConstantsInFiles(): Unit = {
-    val home = System.getProperty("user.home")
-    val work = Path.of(home, "work", "pi")
-    val piFile = work.resolve("pi.txt")
-    require(Files.exists(piFile), s"file must exist $piFile")
-    println(piFile)
-    Util.digitsFromFile(piFile)
+    Util.digitsPiXL
       .zipWithIndex
       .take(100_000_000)
       .foreach { (c, i) =>
