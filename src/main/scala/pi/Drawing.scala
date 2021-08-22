@@ -12,13 +12,16 @@ import scala.util.Random
 
 object Drawing {
 
-  class CanvasAwt(val id: String, val width: Int, val height: Int, stroke: Double, background: Color) extends Canvas {
+  class CanvasAwt(cfg: PiConfig) extends Canvas {
+    
+    def width = cfg.width
+    def height = cfg.width
 
     val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR)
     val graphics = image.getGraphics.asInstanceOf[Graphics2D]
-    graphics.setColor(background)
+    graphics.setColor(cfg.background)
     graphics.fillRect(0, 0, width, height)
-    graphics.setStroke(new BasicStroke(stroke.toFloat))
+    graphics.setStroke(new BasicStroke(cfg.stroke.toFloat))
 
 
     def line(color: Color, from: Point, to: Point): Unit = {
@@ -27,23 +30,23 @@ object Drawing {
     }
 
     def close(): Unit = {
-      val outFile = Path.of(s"target/$id.png").toFile
+      val outFile = Path.of(s"target/${cfg.id}.png").toFile
       ImageIO.write(image, "png", outFile)
       println(s"Wrote image to ${outFile.getAbsolutePath}")
 
-      val thumb = Scalr.resize(image, Scalr.Method.BALANCED, 300, 300);
-      val thumbFile = Path.of(s"target/$id-thumb.png").toFile
-      ImageIO.write(thumb, "png", thumbFile)
-      println(s"Wrote thumbnail image to ${thumbFile.getAbsolutePath}")
-
-
+      if cfg.createThumbnail then {
+        val thumb = Scalr.resize(image, Scalr.Method.BALANCED, 300, 300);
+        val thumbFile = Path.of(s"target/${cfg.id}-thumb.png").toFile
+        ImageIO.write(thumb, "png", thumbFile)
+        println(s"Wrote thumbnail image to ${thumbFile.getAbsolutePath}")
+      }
     }
 
 
   }
 
   def run(cfg: PiConfig): Unit = {
-    val canvas: Canvas = CanvasAwt(cfg.id, cfg.width, cfg.width, cfg.stroke, cfg.background)
+    val canvas: Canvas = CanvasAwt(cfg)
     HilbertTurtle.draw(cfg.depth, canvas, cfg.colors)
     canvas.close()
   }

@@ -32,12 +32,15 @@ object Main {
                        width: Int,
                        stroke: Double,
                        background: Color,
-                       colors: Iterator[Color]
+                       colors: Iterator[Color],
+                       createThumbnail: Boolean = true,
                      )
 
   val baseSize = 1080
 
   val cfgs = Seq(
+    PiConfig("resa1", 1, 50, 1, Color.WHITE, ColorIterator.red),
+    PiConfig("res2", 2, 7, 1, Color.WHITE, ColorIterator.red),
     PiConfig("demo1", 5, 1 * baseSize, 15, Color.BLACK, ColorIterator.pi(ColorIterator.seqColorHue)),
     PiConfig("pi-zero-7", 7, 2 * baseSize, 5, Color.WHITE, ColorIterator.pi(ColorIterator.seqZero)),
     PiConfig("ran-zero-7", 7, 2 * baseSize, 5, Color.WHITE, ColorIterator.random(ColorIterator.seqZero)),
@@ -77,7 +80,7 @@ object Main {
         Drawing.run(cfg)
 
       case conf.tryout =>
-        Tryout.treatmentOfBigConstantsInFiles()
+        Tryout.analyseMinimalResolution()
     })
   }
 }

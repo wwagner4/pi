@@ -32,6 +32,7 @@ object ColorIterator {
   )
 
   def red: Iterator[Color] = LazyList.continually(Color.RED).iterator
+  def gray: Iterator[Color] = LazyList.continually(Color.GRAY).iterator
 
   def random(colors: Seq[Color]): Iterator[Color] = {
     new Iterator[Color] {

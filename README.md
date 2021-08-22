@@ -48,3 +48,8 @@ https://archive.org/details/Math_Constants
   100,000,000 - 12s
 1,000,000,000 - 92s
 ```
+# Minimum resolution to show a hilbert curve.
+
+Minimum size of the canvas for a polygon of depth n is
+
+len = pow(2, n + 1) + 1
