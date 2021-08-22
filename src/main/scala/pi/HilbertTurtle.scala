@@ -52,9 +52,8 @@ object HilbertTurtle {
 
   def draw(level: Int, canvas: Canvas, colorIterator: Iterator[Color]): Unit = {
 
-    val w = math.min(canvas.width, canvas.height)
     val l = math.pow(2, level)
-    val len = math.ceil(w.toDouble / (l + 2))
+    val len = math.ceil(canvas.size.toDouble / (l + 2))
     // println(s"l/width/l/len: $level/$w/$l/$len")
     val turtle = Turtle(canvas, colorIterator, Direction.Up, Point(len - 1, len - 1))
 

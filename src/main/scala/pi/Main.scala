@@ -17,9 +17,7 @@ object Main {
   case class Line(color: Color, start: Point, end: Point)
 
   trait Canvas {
-    def width: Int
-
-    def height: Int
+    def size: Int
 
     def line(color: Color, from: Point, to: Point): Unit
 

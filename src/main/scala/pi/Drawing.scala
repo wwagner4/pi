@@ -14,13 +14,13 @@ object Drawing {
 
   class CanvasAwt(cfg: PiConfig) extends Canvas {
     
-    def width = cfg.width
+    def size = cfg.width
     def height = cfg.width
 
-    val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR)
+    val image = new BufferedImage(size, height, BufferedImage.TYPE_INT_BGR)
     val graphics = image.getGraphics.asInstanceOf[Graphics2D]
     graphics.setColor(cfg.background)
-    graphics.fillRect(0, 0, width, height)
+    graphics.fillRect(0, 0, size, height)
     graphics.setStroke(new BasicStroke(cfg.stroke.toFloat))
 
 

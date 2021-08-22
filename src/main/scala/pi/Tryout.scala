@@ -13,9 +13,9 @@ import scala.collection.parallel.CollectionConverters._
 object Tryout {
 
   def analyseMinimalResolution(): Unit = {
-    (1 to 14).par.foreach { depth =>
+    (1 to 6).par.foreach { depth =>
       val width = math.pow(2, depth + 1).toInt + 1
-      val cfg = PiConfig(s"resa$depth", depth, width, 1, Color.WHITE, ColorIterator.gray, createThumbnail = false)
+      val cfg = PiConfig(s"resa$depth", depth, width, 1, Color.WHITE, ColorIterator.increasing(ColorIterator.seqColorHue)(9), createThumbnail = false)
       Drawing.run(cfg)
     }
   }
@@ -41,9 +41,7 @@ object Tryout {
     class CanvasCount() extends Canvas {
       var count = 0
 
-      override def height: Int = 0
-
-      override def width: Int = 0
+      override def size: Int = 0
 
       def line(color: Color, from: Point, to: Point): Unit = {
         count += 1

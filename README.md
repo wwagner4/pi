@@ -53,3 +53,7 @@ https://archive.org/details/Math_Constants
 Minimum size of the canvas for a polygon of depth n is
 
 len = pow(2, n + 1) + 1
+
+![demo1-thumb](src/main/resources/res1.png)
+![demo1-thumb](src/main/resources/res2.png)
+![demo1-thumb](src/main/resources/res3.png)
