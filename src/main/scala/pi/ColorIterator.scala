@@ -10,13 +10,15 @@ object ColorIterator {
     Color.getHSBColor(hue.toFloat, 1.0f, 1.0f)
   }
 
-  def colorBright(bright: Double)(hue: Double): Color = {
+  def colorBright(hue: Double)(bright: Double): Color = {
     Color.getHSBColor(hue.toFloat, 1.0f, bright.toFloat)
   }
 
-  lazy val seqColorHue = Util.linvals(10, 0, 0.9, colorHue)
+  lazy val seqColorBrightRed = Util.linvals(10, 0, 1, colorBright(0))
+  lazy val seqColorBrightGreen = Util.linvals(10, 0, 1, colorBright(0.3))
+  lazy val seqColorBright3 = Util.linvals(10, 0, 1, colorBright(0.7))
 
-  lazy val seqColorBright1 = Util.linvals(10, 0, 1, colorBright(0.3))
+  lazy val seqColorHue = Util.linvals(10, 0, 0.9, colorHue)
 
   lazy val seqZero = Seq(
     Color.BLACK,
@@ -45,13 +47,22 @@ object ColorIterator {
     }
   }
 
-  def increasing(colors: Seq[Color])(max: Int): Iterator[Color] = {
-    val seq = 0 to max
+  def increasing10 = increasing(10)
+
+  private def increasing(size: Int)(colors: Seq[Color]): Iterator[Color] = {
+    val seq = 0 to (size - 1)
+    LazyList.continually(seq).flatten.iterator.map(colors(_))
+  }
+
+  def increasingHue(size: Int): Iterator[Color] = {
+    val colors = Util.linvals(10000, 0, 0.9999, colorHue)
+    val seq = 0 to (size - 1)
     LazyList.continually(seq).flatten.iterator.map(colors(_))
   }
 
   def pi(colors: Seq[Color]): Iterator[Color] = {
-    Util.digitsPi1mFromResource.map(colors(_))
+    require(colors.size == 10)
+    Util.digitsPiXL.map(colors(_))
   }
 
 
