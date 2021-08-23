@@ -4,18 +4,21 @@ Idea of this project was to visualize pi by means of a hilbert polygon
 
 ## Results
 
-[![demo1-thumb](src/main/resources/demo1-thumb.png)](src/main/resources/demo1.png)   
+[![16M digits](src/main/resources/minwidth-12-8193-thumb.png)](src/main/resources/minwidth-12-8193.png)   
+16,777,215 digits
+
+[![1M digits](src/main/resources/minwidth-10-2049-thumb.png)](src/main/resources/minwidth-10-2049.png)   
+1,048,575 digits
+
+[![demo1](src/main/resources/demo1-thumb.png)](src/main/resources/demo1.png)   
 1,023 digits
 
-[![demo1-thumb](src/main/resources/pi-5-colorful-thumb.png)](src/main/resources/pi-5-colorful.png)   
+[![colorful](src/main/resources/pi-5-colorful-thumb.png)](src/main/resources/pi-5-colorful.png)   
 1,023 digits  
-
-[![demo1-thumb](src/main/resources/minwidth-10-2049-thumb.png)](src/main/resources/minwidth-10-2049.png)   
-1,048,575 digits  
 
 These have noting to with pi. They just look nice.
 
-[![demo1-thumb](src/main/resources/inc-color-hue-long-XL-thumb.png)](src/main/resources/inc-color-hue-long-XL.png)
+[![long-hue](src/main/resources/inc-color-hue-long-XL-thumb.png)](src/main/resources/inc-color-hue-long-XL.png)
 
 # Length of a hilbert polygon
 

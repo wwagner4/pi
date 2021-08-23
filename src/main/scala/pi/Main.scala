@@ -32,7 +32,7 @@ object Main {
                          background: Color,
                          colors: Iterator[Color],
                          createThumbnails: Boolean = false,
-                     )
+                       )
 
   val baseSize = 1080
 
@@ -48,7 +48,13 @@ object Main {
     {
       val depth = 10
       val size = PiUtil.minCanvasSizeForDepth(depth)
-      val colors = ColorIterator.pi (ColorIterator.seqColorHue)
+      val colors = ColorIterator.pi(ColorIterator.seqColorHue)
+      DrawConfig(s"minwidth-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
+    },
+    {
+      val depth = 12
+      val size = PiUtil.minCanvasSizeForDepth(depth)
+      val colors = ColorIterator.pi(ColorIterator.seqColorHue)
       DrawConfig(s"minwidth-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
     }
   )
