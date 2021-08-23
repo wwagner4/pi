@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pi.iml" filepath="$PROJECT_DIR$/.idea/modules/pi.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pi-build.iml" filepath="$PROJECT_DIR$/.idea/modules/pi-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pi.project.pi-build.iml" filepath="$PROJECT_DIR$/.idea/modules/pi.project.pi-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prj.pi.iml" filepath="$PROJECT_DIR$/.idea/modules/prj.pi.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/project.pi-build.iml" filepath="$PROJECT_DIR$/.idea/modules/project.pi-build.iml" />
     </modules>
   </component>
