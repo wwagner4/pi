@@ -5,16 +5,19 @@ Idea of this project was to visualize pi by means of a hilbert polygon
 ## Results
 
 [![16M digits](src/main/resources/minwidth-12-8193-thumb.png)](src/main/resources/minwidth-12-8193.png)   
-16,777,215 digits
+pi 16,777,215 digits
+
+[![16M digits](src/main/resources/minwidth-random-12-8193-thumb.png)](src/main/resources/minwidth-random-12-8193.png)   
+random 16,777,215 digits
 
 [![1M digits](src/main/resources/minwidth-10-2049-thumb.png)](src/main/resources/minwidth-10-2049.png)   
-1,048,575 digits
+pi 1,048,575 digits
 
 [![demo1](src/main/resources/demo1-thumb.png)](src/main/resources/demo1.png)   
-1,023 digits
+pi 1,023 digits
 
 [![colorful](src/main/resources/pi-5-colorful-thumb.png)](src/main/resources/pi-5-colorful.png)   
-1,023 digits  
+pi 1,023 digits  
 
 These have noting to with pi. They just look nice.
 

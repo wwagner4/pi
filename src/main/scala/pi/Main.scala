@@ -56,6 +56,12 @@ object Main {
       val size = PiUtil.minCanvasSizeForDepth(depth)
       val colors = ColorIterator.pi(ColorIterator.seqColorHue)
       DrawConfig(s"minwidth-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
+    },
+    {
+      val depth = 12
+      val size = PiUtil.minCanvasSizeForDepth(depth)
+      val colors = ColorIterator.random(ColorIterator.seqColorHue)
+      DrawConfig(s"minwidth-random-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
     }
   )
 
