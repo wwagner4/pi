@@ -17,32 +17,37 @@ object Drawing {
     override def size: Int = cfg.size
 
     val image = new BufferedImage(cfg.size, cfg.size, BufferedImage.TYPE_INT_BGR)
-    val graphics = image.getGraphics.asInstanceOf[Graphics2D]
+    private val graphics = image.getGraphics.asInstanceOf[Graphics2D]
     graphics.setColor(cfg.background)
     graphics.fillRect(0, 0, cfg.size, cfg.size)
     graphics.setStroke(new BasicStroke(cfg.stroke.toFloat))
-
 
     def line(color: Color, from: Point, to: Point): Unit = {
       graphics.setColor(color)
       graphics.drawLine(
         math.floor(from.x).toInt, cfg.size - math.ceil(from.y).toInt,
-          math.floor(to.x).toInt, cfg.size - math.ceil(to.y).toInt)
+        math.floor(to.x).toInt, cfg.size - math.ceil(to.y).toInt)
     }
 
     def close(): Unit = {
+      // Nothing to do here
+    }
+  }
+
+  class CanvasAwtFile(cfg: DrawConfig) extends CanvasAwt(cfg) {
+
+    override def close(): Unit = {
       val outFile = Path.of(s"target/${cfg.id}.png").toFile
       ImageIO.write(image, "png", outFile)
       println(s"Wrote image to ${outFile.getAbsolutePath}")
-      
-      if cfg.createThumbnails then {
+
+      if cfg.createThumbnails then { 
         val thumb = Scalr.resize(image, Scalr.Method.BALANCED, 300, 300);
         val thumbFile = Path.of(s"target/${cfg.id}-thumb.png").toFile
         ImageIO.write(thumb, "png", thumbFile)
         println(s"Wrote thumbnail image to ${thumbFile.getAbsolutePath}")
       }
     }
-
 
   }
 

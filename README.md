@@ -1,6 +1,6 @@
 # pi
 
-Idea of this project was to visualize pi by means of a hilbert polygon
+Idea of this project was to visualize pi by means of a hilbert polygon.
 
 ## Results
 
@@ -71,10 +71,50 @@ https://archive.org/details/Math_Constants
 ```
 # Minimum resolution to show a hilbert curve.
 
-Minimum size of the canvas for a polygon of depth n is
+Minimum size of the canvas for a polygon of depth n means
+that the line and space between the polygon is one pixel. 
 
 len = pow(2, n + 1) + 1
 
 ![demo1-thumb](src/main/resources/res1.png)
 ![demo1-thumb](src/main/resources/res2.png)
 ![demo1-thumb](src/main/resources/res3.png)
+
+```text
++-------+----------------+
+| depth | resolution[px] |
++-------+----------------+
+|     1 |              5 |
+|     2 |              9 |
+|     3 |             17 |
+|     4 |             33 |
+|     5 |             65 |
+|     6 |            129 |
+|     7 |            257 |
+|     8 |            513 |
+|     9 |           1025 |
+|    10 |           2049 |
+|    11 |           4097 |
+|    12 |           8193 |
+|    13 |          16385 |
+|    14 |          32769 |
+|    15 |          65537 |
++-------+----------------+
+```
+
+# JavaScript Libraries to Create Interactive and Customized Maps
+
+https://www.hongkiat.com/blog/javascript-libraries-for-interactive-maps/
+
+# Create tiles using 
+
+```
+docker run -it -u 1000:1000 -v /home/wwagner4:/home osgeo/gdal sh
+```
+
+Inside the container navigate to the image you want to split into tiles /home/.../your-iamge.png
+
+There call:
+```
+gdal2tiles.py -p raster -r near -z 4-10 your-image.png your-output-directory
+```
