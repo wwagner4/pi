@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hilbert</title>
+    <style>
+        @font-face {
+            font-family: 'pifont';
+            src: url('FrederickatheGreat-Regular.ttf')  format('truetype');
+        }
+        body {
+            background-color: #d9d579;
+            font-family: 'pifont', sans-serif;
+            background-image: url("sample11b.png");
+        }
+
+        .content {
+            background-color: #00000000;
+            max-width: 60em;
+            margin: 0 auto 0 auto;
+        }
+
+        .hilb-cont {
+            margin: 0 0 0.4em 0;  
+            background-color: #00000000;
+        }
+
+        .hilb {
+            margin-right: 3em;
+            background-color: rgba(255, 255, 255, 0.185);
+            aspect-ratio: 1;
+        }
+        .head {
+            font-size: 1.5em;
+            background-color: #00000000;
+            padding-bottom: 1em;
+            padding-left: 0.3em;
+            padding-right: 0.3em;
+        }
+        .title {
+            font-size: 3em;
+            background-color: #00000000;
+            text-align: center;
+            padding: 2em 0.3em 1em;
+        }
+
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="title">
+        HILBERT CURVES
+    </div>
+    <div class="head">
+        A hilbert curve is a space filling curve. 
+        These are curves whose range contain 
+        an entire two-dimensional object.
+        They were first described by the german mathematician 
+        David Hilbert in 1891 
+    </div>
+    <div class="hilb-cont">
+        <div class="hilb"></div>
+    </div>
+    <div class="hilb-cont">
+        <div class="hilb"></div>
+    </div>
+    <div class="hilb-cont">
+        <div class="hilb"></div>
+    </div>
+</div>
+</body>
+</html>

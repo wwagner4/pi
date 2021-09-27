@@ -1,5 +1,7 @@
 package pi
 
+import pi.Tiles.getClass
+
 import java.nio.file.{Files, Path}
 import scala.io.{Codec, Source}
 
@@ -39,5 +41,36 @@ object Util {
     workPath
   }
 
+  private def drawingWorkPath: Path = {
+    val workPath = piWorkPath.resolve("drawing")
+    if Files.notExists(workPath) then Files.createDirectories(workPath)
+    workPath
+  }
 
+  def drawingFile(id: String): Path = {
+    val outFile = drawingWorkPath.resolve(s"$id.png")
+    outFile
+  }
+
+  def drawingThumbFile(id: String): Path = {
+    val outFile = drawingWorkPath.resolve(s"$id.png")
+    outFile
+  }
+
+  def copyResource(resource: String, fileName: String, outDir: Path): Unit = {
+    val is = getClass.getClassLoader.getResourceAsStream(resource)
+    val outFile = outDir.resolve(fileName)
+    Files.write(outFile, is.readAllBytes())
+    println(s"Copied $resource to $outFile")
+  }
+
+  def tileMapResourceFile(id: String): Path = {
+    val mapResourcePath = Path.of("tiles", id, "tilemapresource.xml")
+    Util.piWorkPath.resolve(mapResourcePath)
+  }
+
+  def openLayersHtmlFile(id: String): Path = {
+    val mapResourcePath = Path.of("tiles", id, "openlayers.html")
+    Util.piWorkPath.resolve(mapResourcePath)
+  }
 }

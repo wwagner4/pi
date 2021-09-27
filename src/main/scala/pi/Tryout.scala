@@ -1,20 +1,25 @@
 package pi
 
 import org.imgscalr.Scalr
-import pi.Hp.Image as HpImage
-import pi.Main.{Canvas, DrawConfig, Point}
+import pi.Main.{Canvas, DrawConfig, Point, TilesConfig}
 
 import java.awt.image.BufferedImage
 import java.awt.{BasicStroke, Color, Graphics2D, Image}
 import java.nio.file.{Files, Path}
 import javax.imageio.ImageIO
+import javax.sql.rowset.spi.XmlReader
 import scala.io.Source
 import scala.util.Random
+import scala.xml.XML
 
 
 object Tryout {
 
-  def doIt(): Unit = createMapImages()
+  def doIt(): Unit = tileMapRes()
+
+  def tileMapRes(): Unit = {
+    println(s"--- TileMapResource: ${Tiles.tileMapResource("cf1")}")
+  }
 
   def extractOpenLayerJs(): Unit = {
     println("Extract map code")
@@ -91,17 +96,21 @@ object Tryout {
         |""".stripMargin.trim
 
 
-    val img = HpImage(
+    val cfg = DrawConfig(
       id = "color",
-      text = "Colorful Hilbert polygon of depth 9",
-      hilbertDepth = 9,
-      prescaling = 32,
-      initialResolution = 8,
-      zoomLevels = "1-8",
-      colors = Colors.Hue(10_000),
+      description = "Colorful Hilbert polygon of depth 9",
+      depth = 9,
+      size = Util.minCanvasSizeForDepth(9),
+      stroke = 1,
+      colors = () => ColorIterator.iterator(Colors.Hue(10_000)),
+      background = Color.WHITE,
+      tilesConfig = TilesConfig(
+        prescaling = 32,
+        zoomLevels = "1-8",
+      ),
     )
 
-    val base = Hp.extractOpenLayerJs1(openLayerHtml, img)
+    val base = Hp.extractOpenLayerJs1(openLayerHtml, cfg)
     println(base)
 
   }
@@ -118,10 +127,10 @@ object Tryout {
       size = baseSize,
       stroke = 1,
       background = Color.WHITE,
-      colors = ColorIterator.iterator(Colors.Pi(DigiMap.Hue))
+      colors = () => ColorIterator.iterator(Colors.Hue(200))
     )
     val canvas = Drawing.CanvasAwt(cfg)
-    HilbertTurtle.draw(hilbertDepth, canvas, cfg.colors)
+    HilbertTurtle.draw(hilbertDepth, canvas, cfg.colors())
 
     def draw(image: BufferedImage, scale: Int): Unit = {
       val size = baseSize * scale
@@ -149,9 +158,9 @@ object Tryout {
   def drawMinimumSize(): Unit = {
     Seq(9, 10, 11, 12).foreach { depth =>
       val size = Util.minCanvasSizeForDepth(depth)
-      val colors = ColorIterator.iterator(Colors.Red)
+      val colors = () => ColorIterator.iterator(Colors.Red)
       val cfg = DrawConfig(s"reso-$depth-$size", depth, size, 1, Color.BLACK, colors)
-      Drawing.run(cfg)
+      Drawing.run(cfg, false)
     }
   }
 
