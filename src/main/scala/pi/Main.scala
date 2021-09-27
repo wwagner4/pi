@@ -36,31 +36,31 @@ object Main {
 
   val baseSize = 1080
 
-  val cfgs = Seq(
-    DrawConfig("demo1", 5, 1 * baseSize, 15, Color.BLACK, ColorIterator.pi(ColorIterator.seqColorHue)),
-    DrawConfig("pi-zero-7", 7, 2 * baseSize, 5, Color.WHITE, ColorIterator.pi(ColorIterator.seqZero)),
-    DrawConfig("ran-zero-7", 7, 2 * baseSize, 5, Color.WHITE, ColorIterator.random(ColorIterator.seqZero)),
-    DrawConfig("pi-zero-XL", 9, 5 * baseSize, 7, Color.WHITE, ColorIterator.pi(ColorIterator.seqZero)),
-    DrawConfig("pi-color-hue-XL", 9, 5 * baseSize, 4, Color.BLACK, ColorIterator.pi(ColorIterator.seqColorHue)),
-    DrawConfig("inc-color-hue-long-XL", 9, 5 * baseSize, 4, Color.BLACK, ColorIterator.increasingHue(10000)),
-    DrawConfig("inc-color-hue", 6, 1 * baseSize, 10, Color.BLACK, ColorIterator.increasing10(ColorIterator.seqColorHue)),
-    DrawConfig("pi-5-colorful", 5, 4000, 100, Color.BLACK, ColorIterator.pi(ColorIterator.seqColorHue), createThumbnails = true),
+  lazy val cfgs = Seq(
+    DrawConfig("demo1", 5, 1 * baseSize, 15, Color.BLACK, ColorIterator.iterator(Colors.Pi(DigiMap.Hue))),
+    DrawConfig("pi-zero-7", 7, 2 * baseSize, 5, Color.WHITE, ColorIterator.iterator(Colors.Pi(DigiMap.ZeroBlack))),
+    DrawConfig("ran-zero-7", 7, 2 * baseSize, 5, Color.WHITE, ColorIterator.iterator(Colors.Random(DigiMap.ZeroBlack))),
+    DrawConfig("pi-zero-XL", 9, 5 * baseSize, 7, Color.WHITE, ColorIterator.iterator(Colors.Pi(DigiMap.ZeroBlack))),
+    DrawConfig("pi-color-hue-XL", 9, 5 * baseSize, 4, Color.BLACK, ColorIterator.iterator(Colors.Pi(DigiMap.Hue))),
+    DrawConfig("inc-color-hue-long-XL", 9, 5 * baseSize, 4, Color.BLACK, ColorIterator.iterator(Colors.Hue(10_000))),
+    DrawConfig("inc-color-hue", 6, 1 * baseSize, 10, Color.BLACK, ColorIterator.iterator(Colors.Hue(10))),
+    DrawConfig("pi-5-colorful", 5, 4000, 100, Color.BLACK, ColorIterator.iterator(Colors.Pi(DigiMap.Hue)), createThumbnails = true),
     {
       val depth = 10
       val size = PiUtil.minCanvasSizeForDepth(depth)
-      val colors = ColorIterator.pi(ColorIterator.seqColorHue)
+      val colors = ColorIterator.iterator(Colors.Pi(DigiMap.Hue))
       DrawConfig(s"minwidth-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
     },
     {
       val depth = 12
       val size = PiUtil.minCanvasSizeForDepth(depth)
-      val colors = ColorIterator.pi(ColorIterator.seqColorHue)
+      val colors = ColorIterator.iterator(Colors.Pi(DigiMap.Hue))
       DrawConfig(s"minwidth-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
     },
     {
       val depth = 12
       val size = PiUtil.minCanvasSizeForDepth(depth)
-      val colors = ColorIterator.random(ColorIterator.seqColorHue)
+      val colors = ColorIterator.iterator(Colors.Random(DigiMap.Hue))
       DrawConfig(s"minwidth-random-$depth-$size", depth, size, 1, Color.BLACK, colors, createThumbnails = true)
     }
   )
@@ -84,9 +84,13 @@ object Main {
     object tryout extends Subcommand("tryout") {
     }
 
+    object hp extends Subcommand("hp") {
+    }
+
     addSubcommand(draw)
     addSubcommand(drawall)
     addSubcommand(tryout)
+    addSubcommand(hp)
     verify()
   }
 
@@ -103,6 +107,9 @@ object Main {
 
       case conf.tryout =>
         Tryout.doIt()
+
+      case conf.hp =>
+        Hp.create()
     })
   }
 }

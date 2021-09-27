@@ -1,7 +1,7 @@
 package pi
 
 import java.nio.file.{Files, Path}
-import scala.io.Source
+import scala.io.{Codec, Source}
 
 object Util {
 
@@ -17,9 +17,7 @@ object Util {
   }
 
   def digitsPiXL: Iterator[Int] = {
-    val home = System.getProperty("user.home")
-    val work = Path.of(home, "work", "pi")
-    val piFile = work.resolve("pi.txt")
+    val piFile = piWorkPath.resolve("pi.txt")
     require(Files.exists(piFile), s"file must exist $piFile")
     Source.fromFile(piFile.toFile)
       .iterator
@@ -32,6 +30,13 @@ object Util {
       .iterator
       .filter(_.isDigit)
       .map(_.asDigit)
+  }
+
+  def piWorkPath: Path = {
+    val workPath = if System.getenv("PI_WORK") != null then Path.of(System.getenv("PI_WORK"))
+    else Path.of(System.getProperty("user.home"), "work", "pi")
+    if Files.notExists(workPath) then Files.createDirectories(workPath)
+    workPath
   }
 
 
