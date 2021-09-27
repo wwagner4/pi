@@ -23,7 +23,7 @@ These have noting to with pi. They just look nice.
 
 [![long-hue](src/main/resources/inc-color-hue-long-XL-thumb.png)](src/main/resources/inc-color-hue-long-XL.png)
 
-# Length of a hilbert polygon
+### Length of a hilbert polygon
 
 ```
 +---------+---------------------+
@@ -54,22 +54,22 @@ These have noting to with pi. They just look nice.
 |      23 |   70.368.744.177.663|
 +---------+---------------------+
 ```
-# Resources for math constants
+### Resources for math constants
 
 https://archive.org/details/Math_Constants
 
 * Download the zipfile
-* Extract the dezimal part from it
+* Extract the decimal part from it
 * Rename that part pi.txt
 * Move it to $HOME/work/pi
 
-## Performance of reading digits from text files.
+### Performance of reading digits from text files.
 
 ```
   100,000,000 - 12s
 1,000,000,000 - 92s
 ```
-# Minimum resolution to show a hilbert curve.
+### Minimum resolution to show a hilbert curve.
 
 Minimum size of the canvas for a polygon of depth n means
 that the line and space between the polygon is one pixel. 
@@ -102,17 +102,58 @@ len = pow(2, n + 1) + 1
 +-------+----------------+
 ```
 
-# JavaScript Libraries to Create Interactive and Customized Maps
+## Getting started
+
+### pi docker
+
+To build an image call
+```
+docker build -t pi .
+```
+
+To run pi inside the image call
+```
+docker run -it \
+-v YOUR_HOME:/home \
+-u UID:GRPID \
+pi bash
+````
+
+Change directory to /home/PATH_TO_YOUR_PROJECT
+
+There call
+```
+sbt run hp
+```
+
+Example calls for 'docker run'
+```
+docker run -it \
+-v /home/wwagner4:/home \
+-u 1000:1000 \
+-e SBT_OPTS="-Xmx5G" \
+pi bash
+```
+
+```
+docker run -it \
+-v /home/itsv.org.sv-services.at/31100428:/home \
+-u 499807169:499800513 \
+-e SBT_OPTS="-Xmx4G" \
+pi bash
+```
+
+### JavaScript Libraries to Create Interactive and Customized Maps
 
 https://www.hongkiat.com/blog/javascript-libraries-for-interactive-maps/
 
-# Create tiles using 
+### Create tiles using docker
 
 ```
 docker run -it -u 1000:1000 -v /home/wwagner4:/home osgeo/gdal sh
 ```
 
-Inside the container navigate to the image you want to split into tiles /home/.../your-iamge.png
+Inside the container navigate to the image you want to split into tiles /home/.../your-image.png
 
 There call:
 ```

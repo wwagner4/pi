@@ -1,0 +1,40 @@
+            <div id="map" class="map"></div>
+
+        .map {
+            width: 100%;
+            aspect-ratio: 1;
+        }
+
+   new ol.Map({
+        controls: ol.control.defaults().extend([new ol.control.FullScreen()]),
+        target: 'map',
+        layers: [
+            new ol.layer.Group({
+                title: 'Overlay',
+                layers: [
+                    new ol.layer.Tile({
+                        title: 'Overlay',
+                        source: new ol.source.TileImage({
+                            attributions: '',
+                            tileGrid: new ol.tilegrid.TileGrid({
+                                extent: [0, -8200, 8200, 0],
+                                origin: [0, -8200],
+                                resolutions: [64, 32, 16, 8, 4, 2, 1],
+                                tileSize: [256, 256]
+                            }),
+                            tileUrlFunction: function (tileCoord) {
+                                return ('map/{z}/{x}/{y}.png'
+                                    .replace('{z}', String(tileCoord[0]))
+                                    .replace('{x}', String(tileCoord[1]))
+                                    .replace('{y}', String(-1 - tileCoord[2])));
+                            },
+                        })
+                    }),
+                ]
+            }),
+        ],
+        view: new ol.View({
+            center: [4100.000000, -4100.000000],
+            resolution: 8,
+        })
+    });
