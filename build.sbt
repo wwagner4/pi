@@ -5,6 +5,7 @@ lazy val root = project
     version := "0.1.0",
 
     scalaVersion := "3.0.0",
+    fork := true,
 
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.9",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test",
@@ -13,5 +14,6 @@ lazy val root = project
     libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.3",
     libraryDependencies += "com.github.scopt" %% "scopt" % "4.0.1",
     libraryDependencies += "org.imgscalr" % "imgscalr-lib" % "4.2",
-    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.0.1"
+    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.0.1",
+    libraryDependencies += "com.lihaoyi" %% "cask" % "0.7.12",
   )

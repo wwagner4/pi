@@ -207,6 +207,8 @@ object Main {
 
   case object ErrorCommand extends Command
 
+  case object ServerCommand extends Command
+
   def parse(args: Array[String]): Command = {
 
     def table(selectables: Seq[ConfigWithId], withHeader: Boolean) = {
@@ -246,6 +248,10 @@ object Main {
         cmd("hp")
           .text("Create the 'pi' homepage")
           .action((_, _) => HpCommand
+          ),
+        cmd("server")
+          .text("Starts the web control panal on port 8080")
+          .action((_, _) => ServerCommand
           ),
         cmd("draw")
           .text("Draw a hilbert curve")
@@ -297,6 +303,9 @@ object Main {
         else Drawing.run(cfg, thumbnails)
       case TryoutCommand => Tryout.doIt()
       case HpCommand => Hp.create()
+      case ServerCommand => {
+        CaskServer().run()
+      }
       case ErrorCommand => // Nothing to do
     }
   }
