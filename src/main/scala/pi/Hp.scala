@@ -7,6 +7,7 @@ import pi.Main.*
 import java.awt.Color
 import javax.imageio.ImageIO
 import org.imgscalr.Scalr
+import pi.Tiles.rebuildTiles
 
 
 object Hp {
@@ -23,56 +24,64 @@ object Hp {
 
   }
 
-  case class Image(
-                    id: String,
-                    text: String,
-                    hilbertDepth: Int,
-                    initialResolution: Int,
-                    prescaling: Int,
-                    zoomLevels: String,
-                    colors: Colors,
-                    backgroundColor: Color = Color.BLACK,
-                  )
-
-  case class Group(text: String, images: Seq[Image])
+  case class Group(text: String, images: Seq[DrawConfig])
 
   case class Page(title: String, groups: Seq[Group], imagesForRebuild: RebuildDef)
 
+  val bgColor = {
+    def col(value: Int): Float = value.toFloat / 256
+
+    val r = col(167)
+    val g = col(171)
+    val b = col(147)
+    Color(r,g,b)
+  }
+
   private val page = Page(
+
+
     title = "Idea of this project is to visualize &pi; by means of a Hilbert polygon",
     imagesForRebuild = RebuildDef.All,
     groups = Seq(
       Group(
         text = "Every digit between 0 and 9 is encoded by a color",
         images = Seq(
-          Image(
+          DrawConfig(
             id = "pi",
-            text = "262143 digits of &pi; on a Hilbert curve",
-            hilbertDepth = 9,
-            prescaling = 16,
-            initialResolution = 8,
-            zoomLevels = "1-6",
-            colors = Colors.Pi(DigiMap.Hue),
+            description = "262143 digits of &pi; on a Hilbert curve",
+            size = Util.minCanvasSizeForDepth(9),
+            depth = 9,
+            stroke = 1,
+            colors = () => ColorIterator.iterator(Colors.Pi(DigiMap.Hue)),
+            background = bgColor,
+            tilesConfig = TilesConfig(
+              zoomLevels = "1-6",
+              prescaling = 16,
+            )
           ),
-          Image(
+          DrawConfig(
             id = "ran",
-            text = "262143 random digits on a Hilbert curve",
-            hilbertDepth = 9,
-            prescaling = 16,
-            initialResolution = 8,
-            zoomLevels = "1-6",
-            colors = Colors.Random(DigiMap.Hue),
+            description = "262143 random digits on a Hilbert curve",
+            size = Util.minCanvasSizeForDepth(9),
+            depth = 9,
+            stroke = 1,
+            colors = () => ColorIterator.iterator(Colors.Random(DigiMap.Hue)),
+            background = bgColor,
+            tilesConfig = TilesConfig(
+              prescaling = 16,
+              zoomLevels = "1-6",
+            )
           ),
         )
       ),
     )
   )
 
-  def images(images: Seq[Image]): String = {
-    def img(i: Image) =
+  def images(images: Seq[DrawConfig]): String = {
+    def img(i: DrawConfig) =
       s"""<div class="image-out">
          |    <div class="image">
-         |        <div class="image-text">${i.text}</div>
+         |        <div class="image-text">${i.description}</div>
          |        <div id="${i.id}" class="map"></div>
          |    </div>
          |</div>
@@ -175,17 +184,17 @@ object Hp {
        |""".stripMargin
   }
 
-  def extractOpenLayerJs1(html: String, img: Image): String = {
+  def extractOpenLayerJs1(html: String, drawConfig: DrawConfig): String = {
     val beginIndex = html.indexOf("new ol.Map")
     val stopStr = "});"
     val endIndex = html.lastIndexOf(stopStr) + stopStr.length
     val base = html.substring(beginIndex, endIndex)
     val resolutionRegex = "resolution:.*,".r
     val replaced = base
-      .replace("return ('./", s"return ('${img.id}/")
-      .replace("target: 'map'", s"target: '${img.id}'")
+      .replace("return ('./", s"return ('${drawConfig.id}/")
+      .replace("target: 'map'", s"target: '${drawConfig.id}'")
       .replace("extend([mousePositionControl])", s"extend([new ol.control.FullScreen()])")
-    resolutionRegex.replaceFirstIn(replaced, s"resolution: ${img.initialResolution},")
+    resolutionRegex.replaceFirstIn(replaced, s"resolution: 8,")
   }
 
   def create(): Unit = {
@@ -193,26 +202,24 @@ object Hp {
     if Files.notExists(outPath) then Files.createDirectories(outPath)
     println(s"Creating Homepage in ${outPath.toAbsolutePath}")
 
-    val imagePath = Util.piWorkPath.resolve("hp-image")
-    if Files.notExists(imagePath) then Files.createDirectories(imagePath)
+    val olJsList = page.groups.flatMap(g => g.images).map { drawConfig =>
+      println(s"Creating $drawConfig")
+      val size = Util.minCanvasSizeForDepth(drawConfig.depth)
+      val imageFile = Util.drawingFile(drawConfig.id)
 
-    val olJsList = page.groups.flatMap(g => g.images).map { hpImg =>
-      println(s"Creating $hpImg")
-      val size = Util.minCanvasSizeForDepth(hpImg.hilbertDepth)
-
-      val tilesPath = outPath.resolve(hpImg.id)
+      val tilesPath = outPath.resolve(drawConfig.id)
       page.imagesForRebuild match {
         case RebuildDef.All =>
-          rebuildTiles(hpImg, size, tilesPath, imagePath)
+          Tiles.rebuildTiles(drawConfig, tilesPath, imageFile)
         case RebuildDef.Some(ids) =>
-          if ids.contains(hpImg.id) then rebuildTiles(hpImg, size, tilesPath, imagePath)
+          if ids.contains(drawConfig.id) then rebuildTiles(drawConfig, tilesPath, imageFile)
         case RebuildDef.None => // Nothing to do
       }
 
       val htmlFile = tilesPath.resolve("openlayers.html")
       val src = scala.io.Source.fromFile(htmlFile.toFile)
       val htmlStr = try src.getLines().mkString("\n") finally src.close()
-      extractOpenLayerJs1(htmlStr, hpImg)
+      extractOpenLayerJs1(htmlStr, drawConfig)
     }
 
     val indexPath = outPath.resolve("index.html")
@@ -220,23 +227,4 @@ object Hp {
     println(s"Wrote html to $indexPath")
   }
 
-  private def rebuildTiles(hpImg: _root_.pi.Hp.Image, size: Int, tilesPath: Path, imagePath: Path): Unit = {
-    val cfg = DrawConfig(hpImg.id, hpImg.hilbertDepth, size, 1,
-      hpImg.backgroundColor,
-      ColorIterator.iterator(hpImg.colors))
-
-    val canvas = Drawing.CanvasAwt(cfg)
-    HilbertTurtle.draw(cfg.depth, canvas, cfg.colors)
-    val img = canvas.image
-
-    val sizeScaled = size * hpImg.prescaling
-    val imgScaled = Scalr.resize(img, Scalr.Method.SPEED, sizeScaled, sizeScaled)
-
-    val imgFile = imagePath.resolve(s"${hpImg.id}.png")
-    ImageIO.write(imgScaled, "png", imgFile.toFile)
-    println(s"Wrote image of size $sizeScaled to $imgFile")
-    EasyExec.runAllCommands(Seq(
-      Seq("gdal2tiles.py", "-p", "raster", "-r", "near", "-z", hpImg.zoomLevels,
-        imgFile.toAbsolutePath.toString, tilesPath.toAbsolutePath.toString)))
-  }
 }

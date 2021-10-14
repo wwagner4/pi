@@ -1,11 +1,12 @@
 package pi
 
 import org.imgscalr.Scalr
-import pi.Main.{Canvas, Line, DrawConfig, Point}
+import pi.Main.{Canvas, DrawConfig, Line, Point}
 
 import java.awt.{BasicStroke, Color, Graphics2D}
 import java.awt.image.BufferedImage
-import java.nio.file.Path
+import java.io.File
+import java.nio.file.{Files, Path}
 import javax.imageio.ImageIO
 import scala.util.Random
 
@@ -34,16 +35,18 @@ object Drawing {
     }
   }
 
-  class CanvasAwtFile(cfg: DrawConfig) extends CanvasAwt(cfg) {
+  class CanvasAwtFile(cfg: DrawConfig, createThumbnails: Boolean) extends CanvasAwt(cfg) {
+
 
     override def close(): Unit = {
-      val outFile = Path.of(s"target/${cfg.id}.png").toFile
+
+      val outFile = Util.drawingFile(cfg.id).toFile
       ImageIO.write(image, "png", outFile)
       println(s"Wrote image to ${outFile.getAbsolutePath}")
 
-      if cfg.createThumbnails then { 
+      if createThumbnails then {
         val thumb = Scalr.resize(image, Scalr.Method.BALANCED, 300, 300);
-        val thumbFile = Path.of(s"target/${cfg.id}-thumb.png").toFile
+        val thumbFile = Util.drawingThumbFile(cfg.id).toFile
         ImageIO.write(thumb, "png", thumbFile)
         println(s"Wrote thumbnail image to ${thumbFile.getAbsolutePath}")
       }
@@ -51,9 +54,9 @@ object Drawing {
 
   }
 
-  def run(cfg: DrawConfig): Unit = {
-    val canvas: Canvas = CanvasAwt(cfg)
-    HilbertTurtle.draw(cfg.depth, canvas, cfg.colors)
+  def run(cfg: DrawConfig, createThumbnails: Boolean): Unit = {
+    val canvas: Canvas = CanvasAwtFile(cfg, createThumbnails)
+    HilbertTurtle.draw(cfg.depth, canvas, cfg.colors())
     canvas.close()
   }
 

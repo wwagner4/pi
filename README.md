@@ -58,7 +58,7 @@ These have noting to with pi. They just look nice.
 
 https://archive.org/details/Math_Constants
 
-* Download the zipfile
+* Download the zipfile. wget https://archive.org/download/Math_Constants/Pi.zip
 * Extract the decimal part from it
 * Rename that part pi.txt
 * Move it to $HOME/work/pi
@@ -131,7 +131,7 @@ Example calls for 'docker run'
 docker run -it \
 -v /home/wwagner4:/home \
 -u 1000:1000 \
--e SBT_OPTS="-Xmx5G" \
+-e SBT_OPTS="-Xmx20G" \
 pi bash
 ```
 
