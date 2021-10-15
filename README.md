@@ -149,7 +149,7 @@ pi bash
 
 Start pi server in docker as daemon
 ```
-docker run -d -v /home/wwagner4:/home -u 1000:1000 -e SBT_OPTS="-Xmx5G" \
+docker run -d -v /home/wwagner4:/home -u 1000:1000 -e PI_WORK=/home/work/pi 
 --network host -w /home/prj/pi --name pi-server pi sbt "run server"
 ```
 

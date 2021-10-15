@@ -5,11 +5,14 @@ import cask.router.{Decorator, EndpointMetadata}
 import geny.{Internal, Writable}
 import io.undertow.Undertow
 import io.undertow.server.handlers.BlockingHandler
+import pi.Config.DrawConfig
 
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 
-object MinimalRoutes extends cask.MainRoutes {
+case class MinimalRoutes()(
+  implicit cc: castor.Context,
+  log: cask.Logger) extends cask.Routes {
 
   class HtmlWritable(s: String) extends Writable {
     def writeBytesTo(out: OutputStream): Unit = {
@@ -22,6 +25,16 @@ object MinimalRoutes extends cask.MainRoutes {
   }
 
   def response(message: Option[String]): HtmlWritable = {
+
+    def row(drawConfig: DrawConfig): String = {
+      val id = drawConfig.id
+      val desc = drawConfig.description
+      s"""<tr><td>draw</td><td>$id</td><td>$desc</td><td><a href="/draw/$id">create tiles</a></td>"""
+    }
+
+    val rows = Config.cfgs
+      .map(row).mkString("\n")
+
     val htmlMessage = message.map(s => s"<h2>$s</h2>").getOrElse("")
     HtmlWritable(
       s"""
@@ -31,9 +44,9 @@ object MinimalRoutes extends cask.MainRoutes {
          |</head>
          |<body>
          |<h1>pi control panel</h1>
-         |<a href="/action1">action1</a></br>
-         |<a href="/action2">action2</a></br>
-         |<a href="/draw/ran1">draw ran1</a></br>
+         |<table>
+         |$rows
+         |</table>
          |$htmlMessage
          |</body>
          |</html>
@@ -43,12 +56,6 @@ object MinimalRoutes extends cask.MainRoutes {
   @cask.get("/")
   def index() = response(None)
 
-  @cask.get("/action1")
-  def action1() = response(Some("action1"))
-
-  @cask.get("/action2")
-  def action2() = response(Some("action2"))
-
   @cask.get("/draw", subpath = true)
   def action2(request: cask.Request) = {
     val id = request.remainingPathSegments(0)
@@ -57,7 +64,8 @@ object MinimalRoutes extends cask.MainRoutes {
       .toMap
       .get(id)
       .getOrElse(throw IllegalArgumentException(s"Unknown draw id $id"))
-    response(Some(s"draw cfg: ${cfg}"))
+    Tiles.run(cfg)
+    response(Some(s"Created tiles for cfg: ${id}"))
   }
 
 
@@ -67,13 +75,19 @@ object MinimalRoutes extends cask.MainRoutes {
 
 class CaskServer {
   def mainDecorators: Seq[Decorator[_, _, _]] = Nil
-  def allRoutes: Seq[Routes] = Seq(MinimalRoutes)
+
+  def allRoutes: Seq[Routes] = Seq(MinimalRoutes())
+
   def port: Int = 8080
+
   def host: String = "localhost"
+
   def verbose = false
+
   def debugMode: Boolean = true
 
   def createExecutionContext = castor.Context.Simple.executionContext
+
   def createActorContext = new castor.Context.Simple(executionContext, log.exception)
 
   val executionContext = createExecutionContext
