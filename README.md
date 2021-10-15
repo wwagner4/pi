@@ -131,7 +131,9 @@ Example calls for 'docker run'
 docker run -it \
 -v /home/wwagner4:/home \
 -u 1000:1000 \
--e SBT_OPTS="-Xmx20G" \
+-e SBT_OPTS="-Xmx5G" \
+-p 8080:8080 \
+--network host \
 pi bash
 ```
 
@@ -140,7 +142,15 @@ docker run -it \
 -v /home/itsv.org.sv-services.at/31100428:/home \
 -u 499807169:499800513 \
 -e SBT_OPTS="-Xmx4G" \
+-p 8080:8080 \
+--network host \
 pi bash
+```
+
+Start pi server in docker as daemon
+```
+docker run -d -v /home/wwagner4:/home -u 1000:1000 -e SBT_OPTS="-Xmx5G" \
+--network host -w /home/prj/pi --name pi-server pi sbt "run server"
 ```
 
 ### JavaScript Libraries to Create Interactive and Customized Maps
