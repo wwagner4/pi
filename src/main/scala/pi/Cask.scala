@@ -9,9 +9,7 @@ import io.undertow.server.handlers.BlockingHandler
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 
-case class MinimalRoutes()(
-  implicit cc: castor.Context,
-  log: cask.Logger) extends cask.Routes {
+object MinimalRoutes extends cask.MainRoutes {
 
   class HtmlWritable(s: String) extends Writable {
     def writeBytesTo(out: OutputStream): Unit = {
@@ -33,8 +31,9 @@ case class MinimalRoutes()(
          |</head>
          |<body>
          |<h1>pi control panel</h1>
-         |<a href="action1">action1</a></br>
-         |<a href="action2">action2</a></br>
+         |<a href="/action1">action1</a></br>
+         |<a href="/action2">action2</a></br>
+         |<a href="/draw/ran1">draw ran1</a></br>
          |$htmlMessage
          |</body>
          |</html>
@@ -50,13 +49,25 @@ case class MinimalRoutes()(
   @cask.get("/action2")
   def action2() = response(Some("action2"))
 
+  @cask.get("/draw", subpath = true)
+  def action2(request: cask.Request) = {
+    val id = request.remainingPathSegments(0)
+    val cfg = Config.cfgs
+      .map(c => (c.id, c))
+      .toMap
+      .get(id)
+      .getOrElse(throw IllegalArgumentException(s"Unknown draw id $id"))
+    response(Some(s"draw cfg: ${cfg}"))
+  }
+
+
   initialize()
 
 }
 
 class CaskServer {
   def mainDecorators: Seq[Decorator[_, _, _]] = Nil
-  def allRoutes: Seq[Routes] = Seq(MinimalRoutes())
+  def allRoutes: Seq[Routes] = Seq(MinimalRoutes)
   def port: Int = 8080
   def host: String = "localhost"
   def verbose = false
