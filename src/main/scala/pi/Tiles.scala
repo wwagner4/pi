@@ -1,6 +1,6 @@
 package pi
 
-import Main.{DrawConfig, TilesConfig}
+import Config.{DrawConfig, TilesConfig}
 import org.imgscalr.Scalr
 import pi.Util
 

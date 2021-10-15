@@ -1,7 +1,7 @@
 package pi
 
 import org.imgscalr.Scalr
-import pi.Main.{Canvas, DrawConfig, Point, TilesConfig}
+import pi.Config.{Canvas, DrawConfig, Point, TilesConfig}
 
 import java.awt.image.BufferedImage
 import java.awt.{BasicStroke, Color, Graphics2D, Image}

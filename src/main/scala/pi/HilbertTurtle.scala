@@ -1,6 +1,6 @@
 package pi
 
-import pi.Main.{Canvas, Line, Point}
+import pi.Config.{Canvas, Point}
 import java.awt.Color
 
 object HilbertTurtle {

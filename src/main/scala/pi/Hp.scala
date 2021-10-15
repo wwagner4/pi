@@ -2,13 +2,11 @@ package pi
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path}
-import pi.Main.*
 
 import java.awt.Color
 import javax.imageio.ImageIO
 import org.imgscalr.Scalr
-import pi.Tiles.rebuildTiles
-
+import Config.{DrawConfig, TilesConfig}
 
 object Hp {
 
@@ -34,7 +32,7 @@ object Hp {
     val r = col(167)
     val g = col(171)
     val b = col(147)
-    Color(r,g,b)
+    Color(r, g, b)
   }
 
   private val page = Page(
@@ -212,7 +210,7 @@ object Hp {
         case RebuildDef.All =>
           Tiles.rebuildTiles(drawConfig, tilesPath, imageFile)
         case RebuildDef.Some(ids) =>
-          if ids.contains(drawConfig.id) then rebuildTiles(drawConfig, tilesPath, imageFile)
+          if ids.contains(drawConfig.id) then Tiles.rebuildTiles(drawConfig, tilesPath, imageFile)
         case RebuildDef.None => // Nothing to do
       }
 

@@ -1,7 +1,5 @@
 package pi
 
-import pi.Tiles.getClass
-
 import java.nio.file.{Files, Path}
 import scala.io.{Codec, Source}
 
